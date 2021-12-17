@@ -14,9 +14,8 @@ def talk_to_me():
     rospy.loginfo("Publisher started, now publishing messages")
     while not rospy.is_shutdown():
         msg = catkin_package.msg.Position()
-
         # wywolanie funkcji odpowiedzialnej za rozpoznanie pileczki, funkcja powinna zwracac liste [x, y, size]
-        # msg.x, msg.y, msg.size = funkcja()
+        msg.x, msg.y, msg.size, msg.found = funkcja()
 
         # logika dla sprawdzenia czy algorytm znalazl pileczke, ustawienie msg.found = True/False
 
