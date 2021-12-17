@@ -4,6 +4,7 @@
 import rospy
 import std_msgs.msg
 import catkin_package.msg
+from ball_recognition import ball_recognition
 
 
 def talk_to_me():
@@ -15,7 +16,7 @@ def talk_to_me():
     while not rospy.is_shutdown():
         msg = catkin_package.msg.Position()
         # wywolanie funkcji odpowiedzialnej za rozpoznanie pileczki, funkcja powinna zwracac liste [x, y, size]
-        msg.x, msg.y, msg.size, msg.found = funkcja()
+        msg.x, msg.y, msg.size, msg.found = ball_recognition()
 
         # logika dla sprawdzenia czy algorytm znalazl pileczke, ustawienie msg.found = True/False
 
