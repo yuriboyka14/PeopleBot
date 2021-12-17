@@ -107,7 +107,7 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-catkin_install_python(PROGRAMS scripts/publisher_node.py scripts/subscriber_node.py scripts/service_server_node.py scripts/service_client_node.py
+catkin_install_python(PROGRAMS scripts/camera_input_publisher.py scripts/ball_search_subscriber.py scripts/ball_follow_subscriber.py scripts/service_server_node.py scripts/service_client_node.py scripts/ball_recognition.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
