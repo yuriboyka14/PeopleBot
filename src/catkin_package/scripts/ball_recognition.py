@@ -1,13 +1,17 @@
 import cv2
 import imutils
-import time
 import numpy as np
-import rospy
-from std_msgs.msg import String
 
+##########################################
 
-def ball_recognition():
-    cap = cv2.VideoCapture(0)
+# Nie robmy w sumie na razie tutaj nic tylko w tej funkcji w camera_input_publisher
+
+##########################################
+
+def ball_reco():
+    cap = cv2.VideoCapture(-1)
+    Cx = Cy = radius = 0
+    object_detected = False
 
     while True:
         ret, frame = cap.read()
@@ -75,7 +79,7 @@ def ball_recognition():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-        return Cx, Cx, radius, object_detected
+        return [Cx, Cy, radius, object_detected]
 
     cap.release()
     cv2.destroyAllWindows()
@@ -84,6 +88,6 @@ def ball_recognition():
 
 # if __name__ == '__main__':
 #     try:
-#         ball_detection()
+#         a, b, c, d = ball_reco()
 #     except rospy.ROSInterruptException:
 #         pass
