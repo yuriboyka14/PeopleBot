@@ -40,19 +40,13 @@ def ball_reco(msg, pub):
         x_half = width / 2
         y_half = height / 2
 
-        lower1 = np.array([0, 100, 20])  # for hue (0-10)
-        upper1 = np.array([10, 255, 255])
-
-        lower2 = np.array([160, 100, 20])  # for hue (160-180)
-        upper2 = np.array([179, 255, 255])
+        redLower = (0, 138, 128)
+        redUpper = (180, 255, 255)
 
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)  # It is useful for removing noise.
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)  # BGR to HSV
 
-        lower_mask = cv2.inRange(hsv, lower1, upper1)
-        upper_mask = cv2.inRange(hsv, lower2, upper2)
-        mask = lower_mask + upper_mask
-
+        mask = cv2.inRange(hsv, redLower, redUpper)
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)  # To remove any small blobs left in the mask
 
@@ -92,8 +86,8 @@ def ball_reco(msg, pub):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-        msg.x, msg.y, msg.size, msg.found = Cx, Cy, radius, object_detected
-        pub.publish(msg)
+        # msg.x, msg.y, msg.size, msg.found = Cx, Cy, radius, object_detected
+        # pub.publish(msg)
 
     cap.release()
     cv2.destroyAllWindows()
