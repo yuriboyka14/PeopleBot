@@ -23,13 +23,13 @@ def drive_the_robot(lin_x, ang_z):
 def image_processing(x, r, detected):  # nie wiem jak z ta kamera i jej ruchem na razie, wiec tu poki co nie podajemy y
     if detected:
         if r > 10:  # (size is yet to be set)
-            if x < 500:  # (value yet to be set as well)
+            if int(x) < 0:
                 rospy.loginfo("Too much to left")
                 drive_the_robot(0.1, 0.5)
-            elif x > 500:
+            elif int(x) > 0:
                 rospy.loginfo("Too much to right")
                 drive_the_robot(0.1, -0.5)
-            elif x == 500:
+            elif int(x) == 0:
                 rospy.loginfo("Ball is in center!")
                 drive_the_robot(0.5, 0.0)
         else:
