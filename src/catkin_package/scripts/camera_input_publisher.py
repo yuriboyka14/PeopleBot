@@ -21,10 +21,10 @@ def talk_to_me():
 
         rate.sleep()
 
+
 def ball_reco(msg, pub):
     cap = cv2.VideoCapture(-1)
     Cx = Cy = radius = 0
-    object_detected = False
 
     while True:
         ret, frame = cap.read()
@@ -97,6 +97,7 @@ def ball_reco(msg, pub):
 
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     try:

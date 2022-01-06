@@ -8,21 +8,12 @@ import std_msgs.msg
 import catkin_package.msg
 from move_functions import movement, search_process
 
-# -------------SEARCH OR FOLLOW------#
-
-
-def follow(data):
-    if data.found:
-        return True
-    else:
-        return False
-
 
 def listener():
     rospy.init_node("subscriber_node", anonymous=True)
     # whenever new message is received we will call a callback function to which prints messages
     # rospy.Subscriber("talking_topic", std_msgs.msg.String, callback)
-    if follow:
+    if data.found:
         rospy.Subscriber("talking_topic", catkin_package.msg.Position, movement)
     else:
         rospy.Subscriber("talking_topic", catkin_package.msg.Position, search_process)
