@@ -92,7 +92,7 @@ def ball_reco(msg, pub):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-        msg.x, msg.y, msg.size, msg.found = Cx, Cy, radius, object_detected
+        msg.x, msg.y, msg.size, msg.detected = Cx, Cy, radius, object_detected
         pub.publish(msg)
 
     cap.release()
