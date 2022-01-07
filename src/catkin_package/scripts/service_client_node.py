@@ -1,6 +1,6 @@
 import rospy
 import catkin_package.srv as sv
-import catkin_pkg.msg.Position as pos
+import catkin_package.msg
 
 
 def drive_the_robot(lin_x, ang_z):
@@ -20,16 +20,16 @@ def drive_the_robot(lin_x, ang_z):
             print(f"Service call failed {e}")
 
 
-def image_processing(x, r, detected):  # nie wiem jak z ta kamera i jej ruchem na razie, wiec tu poki co nie podajemy y
-    if detected:
-        if r > 10:  # (size is yet to be set)
-            if int(x) < 0:
+def image_processing(data):  # nie wiem jak z ta kamera i jej ruchem na razie, wiec tu poki co nie podajemy y
+    if data.detected:
+        if data.size > 10:  # (size is yet to be set)
+            if int(data.x) < 0:
                 rospy.loginfo("Too much to left")
                 drive_the_robot(0.1, 0.5)
-            elif int(x) > 0:
+            elif int(data.x) > 0:
                 rospy.loginfo("Too much to right")
                 drive_the_robot(0.1, -0.5)
-            elif int(x) == 0:
+            else:
                 rospy.loginfo("Ball is in center!")
                 drive_the_robot(0.5, 0.0)
         else:
@@ -40,9 +40,8 @@ def image_processing(x, r, detected):  # nie wiem jak z ta kamera i jej ruchem n
 
 def main_client():
     rospy.init_node("client_node")
-    rospy.Subscriber("talking_topic", pos, image_processing(pos.x, pos.size, pos.found))  # here we subscribe to our
+    rospy.Subscriber("talking_topic", catkin_package.msg.Position, image_processing) # here we subscribe to our
     rospy.spin()                                                                          # cam input publisher
-
 
 
 if __name__ == "__main__":
