@@ -9,10 +9,10 @@ def callback(request):
     motor_command = Twist()
 
     # setting values of velocities to requested values
-    motor_command.linear.x = sv.driver(request.linear_x)
-    motor_command.angular.z = sv.driver(request.angular_z)
+    motor_command.linear.x = request.linear_x
+    motor_command.angular.z = request.angular_z
 
-    pub = rospy.Publisher("cmd_vel", Twist, queue_size=10)
+    pub = rospy.Publisher("/RosAria/cmd_vel", Twist, queue_size=10)
     rate = rospy.Rate(1)
 
     pub.publish(motor_command)
@@ -22,8 +22,8 @@ def callback(request):
     #     pub.publish(motor_command)
     #     rate.sleep()
 
-    rospy.loginfo(sv.driverResponse(f"Forward linear x: {str(sv.driver(request.linear_x))}\nrotate "
-                                                    f"angular z: {sv.driver(request.angular_z)}"))
+    rospy.loginfo(sv.driverResponse(f"Forward linear x: {str(request.linear_x)}\nrotate "
+                                                    f"angular z: {request.angular_z}"))
 
 
 def main_server():
