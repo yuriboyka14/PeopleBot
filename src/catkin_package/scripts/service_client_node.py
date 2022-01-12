@@ -8,16 +8,17 @@ def drive_the_robot(lin_x, ang_z):
     catkin_package.srv.driver.linear_x = lin_x
     catkin_package.srv.driver.angular_z = ang_z
 
+    rospy.init_node("client_node")
     rospy.wait_for_service("driver")
     rate = rospy.Rate(1)
-    while not rospy.is_shutdown():
-        try:
-            drive_function = rospy.ServiceProxy("driver", sv.driver)
-            response = drive_function(lin_x, ang_z)
-            rospy.loginfo(response.msg_feedback)
-            rate.sleep()
-        except rospy.ServiceException as e:
-            print(f"Service call failed {e}")
+
+    try:
+        drive_function = rospy.ServiceProxy("driver", catkin_package.srv.driver)
+        response = drive_function(lin_x, ang_z)
+        rospy.loginfo(response.msg_feedback)
+        rate.sleep()
+    except rospy.ServiceException as e:
+        print(f"Service call failed {e}")
 
 
 def image_processing(data):

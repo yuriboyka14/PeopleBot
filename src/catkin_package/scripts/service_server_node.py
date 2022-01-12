@@ -1,5 +1,5 @@
 import rospy
-import catkin_package.srv as sv
+import catkin_package.srv
 from geometry_msgs.msg import Twist
 
 
@@ -22,13 +22,13 @@ def callback(request):
     #     pub.publish(motor_command)
     #     rate.sleep()
 
-    rospy.loginfo(sv.driverResponse(f"Forward linear x: {str(request.linear_x)}\nrotate "
-                                                    f"angular z: {request.angular_z}"))
+    return catkin_package.srv.driverResponse(f"Forward linear x: {str(request.linear_x)}\nrotate "
+                                                    f"angular z: {request.angular_z}")
 
 
 def main_server():
     rospy.init_node("drive_bot_service")
-    rospy.Service("driver", sv.driver, callback)
+    service = rospy.Service("driver", catkin_package.srv.driver, callback)
     rospy.loginfo("Service started successfully.")
     rospy.spin()
 
