@@ -21,10 +21,10 @@ def talk_to_me():
 
         rate.sleep()
 
+
 def ball_reco(msg, pub):
     cap = cv2.VideoCapture(-1)
     Cx = Cy = radius = 0
-    object_detected = False
 
     while True:
         ret, frame = cap.read()
@@ -40,13 +40,19 @@ def ball_reco(msg, pub):
         x_half = width / 2
         y_half = height / 2
 
-        redLower = (0, 138, 128)
-        redUpper = (180, 255, 255)
+        lower1 = np.array([0, 100, 20])  # for hue (0-10)
+        upper1 = np.array([10, 255, 255])
+
+        lower2 = np.array([160, 100, 20])  # for hue (160-180)
+        upper2 = np.array([179, 255, 255])
 
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)  # It is useful for removing noise.
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)  # BGR to HSV
 
-        mask = cv2.inRange(hsv, redLower, redUpper)
+        lower_mask = cv2.inRange(hsv, lower1, upper1)
+        upper_mask = cv2.inRange(hsv, lower2, upper2)
+        mask = lower_mask + upper_mask
+
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)  # To remove any small blobs left in the mask
 
@@ -62,13 +68,15 @@ def ball_reco(msg, pub):
             Cy = int(M['m01'] / M['m00'])
             x_coord = Cx - x_half
             y_coord = -(Cy - y_half)
-            S = '(X: ' + str(x_coord) + ' Y:' + str(y_coord) + ')'
-            cv2.putText(frame, S, (10, 50), font, 1, (0, 0, 0), 2,
-                        cv2.LINE_AA)  #(image, text, org, font, fontScale, color[, thickness[, lineType[, bottomLeftOrigin]]])
+            radius = round(radius, 2)
+            S = 'Radius: ' + str(radius)
+            cv2.putText(frame, S, (10, 80), font, 0.8, (0, 0, 0), 2, cv2.LINE_AA)  #
+            C = 'X: ' + str(x_coord) + ' Y: ' + str(y_coord)
+            cv2.putText(frame, C, (10, 130), font, 0.8, (0, 0, 0), 2, cv2.LINE_AA)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
             # To see the centroid clearly
-            if radius > 10:
+            if radius > 20:
                 cv2.circle(frame, (int(x), int(y)), int(radius), (60, 60, 255),
                            3)  # big circle ((image, center_coordinates, radius, color, thickness))
                 cv2.circle(frame, center, 5, (0, 0, 0), -1)  # small circle
@@ -79,18 +87,19 @@ def ball_reco(msg, pub):
             object_detected = False
 
         T = '(Object on the screen: ' + str(object_detected) + ')'
-        cv2.putText(frame, T, (10, 100), font, 1, (0, 0, 0), 2, cv2.LINE_AA)
+        cv2.putText(frame, T, (10, 30), font, 0.8, (0, 0, 0), 2, cv2.LINE_AA)
 
         cv2.imshow("Ball tracking", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-        # msg.x, msg.y, msg.size, msg.found = Cx, Cy, radius, object_detected
-        # pub.publish(msg)
+        msg.x, msg.y, msg.radius, msg.detected = x_coord, y_coord, radius, object_detected
+        pub.publish(msg)
 
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     try:

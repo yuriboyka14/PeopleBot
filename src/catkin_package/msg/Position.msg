@@ -1,5 +1,5 @@
 string message
 float32 x
 float32 y
-float32 size
-bool found
+float32 radius
+bool detected
