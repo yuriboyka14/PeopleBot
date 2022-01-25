@@ -13,7 +13,7 @@ def callback(request):
     motor_command.angular.z = request.angular_z
 
     pub = rospy.Publisher("/RosAria/cmd_vel", Twist, queue_size=10)
-    rate = rospy.Rate(1)
+    # rate = rospy.Rate(1)
 
     pub.publish(motor_command)
 
