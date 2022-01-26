@@ -55,7 +55,6 @@ add_message_files(
 ## Generate services in the 'srv' folder
 add_service_files(
    FILES
-   multiplier.srv
    driver.srv
  )
 
@@ -108,7 +107,7 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-catkin_install_python(PROGRAMS scripts/camera_input_publisher.py scripts/ball_search_subscriber.py scripts/ball_follow_subscriber.py scripts/service_server_node.py scripts/service_client_node.py scripts/ball_recognition.py
+catkin_install_python(PROGRAMS scripts/camera_input_publisher.py scripts/service_server_node.py scripts/service_client_node.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

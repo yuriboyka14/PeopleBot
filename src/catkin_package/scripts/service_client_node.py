@@ -10,7 +10,7 @@ def drive_the_robot(lin_x, ang_z):
 
     rospy.init_node("client_node")
     rospy.wait_for_service("driver")
-    # rate = rospy.Rate(1)
+    # rate = rospy.Rate(100)
 
     try:
         drive_function = rospy.ServiceProxy("driver", catkin_package.srv.driver)
@@ -23,20 +23,20 @@ def drive_the_robot(lin_x, ang_z):
 
 def image_processing(data):
     if data.detected:
-        if data.radius < 40:
+        if data.radius < 35:
             if int(data.x) < 0:
                 rospy.loginfo(f"Too much to the left {data.x}")
-                drive_the_robot(0.1, 0.5)
+                drive_the_robot(0.1, -0.2)
             elif int(data.x) > 0:
                 rospy.loginfo(f"Too much to the right {data.x}")
-                drive_the_robot(0.1, -0.5)
+                drive_the_robot(0.1, 0.2)
             else:
                 rospy.loginfo("Ball is in the center!")
                 drive_the_robot(0.5, 0.0)
         else:
             drive_the_robot(0.0, 0.0)
     else:
-        drive_the_robot(0.0, 0.1)
+        drive_the_robot(0.0, 0.2)
         rospy.loginfo("Ball was not detected")
 
 
